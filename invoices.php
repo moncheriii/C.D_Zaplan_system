@@ -15,49 +15,49 @@ $stats = [
   ['Next Due Date',       'Nov 11',  'INV-2026-031 · ₱45,000',  'lucide:calendar-clock'],
 ];
 ?>
-<div class="flex flex-wrap items-start justify-between gap-4">
+<div class="page-head">
   <div>
-    <h1 class="text-3xl font-extrabold text-navy tracking-tight">Invoices &amp; Receipts</h1>
-    <p class="text-xs text-slate-500 mt-1">View your billing history and download receipts.</p>
+    <h1 class="page-title">Invoices &amp; Receipts</h1>
+    <p class="page-sub">View your billing history and download receipts.</p>
   </div>
-  <button class="flex items-center gap-2 px-4 py-2.5 bg-white border border-slate-200 rounded-lg text-xs font-semibold text-navy">
+  <button class="btn btn--period">
     <iconify-icon icon="lucide:calendar" width="14"></iconify-icon> 2026 <iconify-icon icon="lucide:chevron-down" width="14"></iconify-icon>
   </button>
 </div>
 
-<div class="mt-6 grid sm:grid-cols-3 gap-4">
+<div class="stat-grid">
   <?php foreach ($stats as [$l,$v,$s,$i]): ?>
-  <div class="bg-white border border-slate-200 rounded-2xl p-6">
-    <div class="flex items-center justify-between text-xs text-slate-500"><span><?= $l ?></span><iconify-icon icon="<?= $i ?>" width="16" class="text-navy"></iconify-icon></div>
-    <div class="mt-3 text-4xl font-extrabold text-navy tracking-tight"><?= $v ?></div>
-    <div class="mt-4 text-xs text-slate-500"><?= $s ?></div>
+  <div class="stat-card">
+    <div class="stat-card__head"><span><?= $l ?></span><iconify-icon icon="<?= $i ?>" width="16" class="stat-card__icon"></iconify-icon></div>
+    <div class="stat-card__value"><?= $v ?></div>
+    <div class="stat-card__sub"><?= $s ?></div>
   </div>
   <?php endforeach; ?>
 </div>
 
-<section class="mt-6 bg-white border border-slate-200 rounded-2xl overflow-hidden">
-  <div class="px-6 py-5">
-    <h2 class="text-lg font-extrabold text-navy">Billing History</h2>
-    <p class="text-xs text-slate-500 mt-0.5"><?= count($invoices) ?> invoices · Payment by cash on delivery / on site</p>
+<section class="card card--spaced">
+  <div class="card__head card__head--block">
+    <h2 class="card__title">Billing History</h2>
+    <p class="card__sub"><?= count($invoices) ?> invoices · Payment by cash on delivery / on site</p>
   </div>
-  <div class="overflow-x-auto">
-    <table class="w-full text-left text-sm min-w-[820px]">
-      <thead class="bg-[#f4f6fa] text-[11px] uppercase tracking-wide text-slate-500 font-semibold">
-        <tr><th class="px-6 py-3">Invoice</th><th class="px-6 py-3">Booking</th><th class="px-6 py-3">Issued</th><th class="px-6 py-3">Due</th><th class="px-6 py-3">Amount</th><th class="px-6 py-3">Status</th><th class="px-6 py-3">Actions</th></tr>
+  <div class="table-wrap">
+    <table class="table table--min-820">
+      <thead>
+        <tr><th>Invoice</th><th>Booking</th><th>Issued</th><th>Due</th><th>Amount</th><th>Status</th><th>Actions</th></tr>
       </thead>
       <tbody>
         <?php foreach ($invoices as $inv): ?>
-        <tr class="border-t border-slate-200">
-          <td class="px-6 py-4"><div class="font-bold text-navy"><?= e($inv['no']) ?></div><div class="text-[11px] text-slate-500"><?= e($inv['desc']) ?></div></td>
-          <td class="px-6 py-4 text-navy"><?= e($inv['ref']) ?></td>
-          <td class="px-6 py-4 text-slate-500 text-xs"><?= e($inv['issued']) ?></td>
-          <td class="px-6 py-4 text-slate-500 text-xs"><?= e($inv['due']) ?></td>
-          <td class="px-6 py-4 font-bold text-navy"><?= e($inv['amount']) ?></td>
-          <td class="px-6 py-4"><?= pill($inv['status']) ?></td>
-          <td class="px-6 py-4">
-            <div class="flex items-center gap-3">
-              <a href="#" class="text-xs font-bold text-navy underline">View</a>
-              <a href="#" class="flex items-center gap-1.5 text-xs font-bold text-navy" aria-label="Download PDF">
+        <tr>
+          <td><div class="cell-title"><?= e($inv['no']) ?></div><div class="cell-meta"><?= e($inv['desc']) ?></div></td>
+          <td><?= e($inv['ref']) ?></td>
+          <td class="td-muted"><?= e($inv['issued']) ?></td>
+          <td class="td-muted"><?= e($inv['due']) ?></td>
+          <td class="td-strong"><?= e($inv['amount']) ?></td>
+          <td><?= pill($inv['status']) ?></td>
+          <td>
+            <div class="row-actions">
+              <a href="#" class="link-underline">View</a>
+              <a href="#" class="link-icon" aria-label="Download PDF">
                 <iconify-icon icon="lucide:download" width="14"></iconify-icon> <?= $inv['status'] === 'Paid' ? 'Receipt' : 'Invoice' ?>
               </a>
             </div>
@@ -67,9 +67,9 @@ $stats = [
       </tbody>
     </table>
   </div>
-  <div class="flex flex-wrap items-center justify-between gap-2 px-6 py-4 border-t border-slate-200 text-xs text-slate-500">
+  <div class="card__foot card__foot--split">
     <span>Cash on delivery / on site only · Questions? Call 09176757888</span>
-    <span class="text-sm font-bold text-navy">Outstanding: ₱77,000.00</span>
+    <span class="card__total">Outstanding: ₱77,000.00</span>
   </div>
 </section>
 <?php require_once __DIR__ . '/includes/portal-footer.php'; ?>

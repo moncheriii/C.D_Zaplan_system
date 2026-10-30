@@ -9,26 +9,26 @@ function initials($name) {
   return substr($out, 0, 2);
 }
 
-/* Status pill: green / amber / blue / rose / slate */
+/* Status pill: green / amber / blue / rose / slate  (styles live in assets/css/style.css) */
 function pill($status) {
   $map = [
-    'Active'         => ['bg-emerald-50 text-emerald-700', 'Active'],
-    'Paid'           => ['bg-emerald-50 text-emerald-700', 'Paid'],
-    'Confirmed'      => ['bg-emerald-50 text-emerald-700', 'Confirmed'],
-    'Available'      => ['bg-emerald-50 text-emerald-700', 'Standby'],
-    'Due'            => ['bg-amber-50 text-amber-700',     'Deposit Due'],
-    'Pending'        => ['bg-amber-50 text-amber-700',     'Pending'],
-    'Pending Review' => ['bg-amber-50 text-amber-700',     'Pending Review'],
-    'Deployed'       => ['bg-blue-50 text-blue-700',       'Deployed'],
-    'New'            => ['bg-emerald-50 text-emerald-700', 'New'],
-    'Replied'        => ['bg-blue-50 text-blue-700',       'Replied'],
-    'Archived'       => ['bg-slate-100 text-slate-600',    'Archived'],
-    'Overdue'        => ['bg-rose-50 text-rose-700',       'Overdue'],
-    'Maintenance'    => ['bg-rose-50 text-rose-700',       'Maintenance'],
-    'Completed'      => ['bg-slate-100 text-slate-600',    'Completed'],
+    'Active'         => ['green', 'Active'],
+    'Paid'           => ['green', 'Paid'],
+    'Confirmed'      => ['green', 'Confirmed'],
+    'Available'      => ['green', 'Standby'],
+    'Due'            => ['amber', 'Deposit Due'],
+    'Pending'        => ['amber', 'Pending'],
+    'Pending Review' => ['amber', 'Pending Review'],
+    'Deployed'       => ['blue',  'Deployed'],
+    'New'            => ['green', 'New'],
+    'Replied'        => ['blue',  'Replied'],
+    'Archived'       => ['slate', 'Archived'],
+    'Overdue'        => ['rose',  'Overdue'],
+    'Maintenance'    => ['rose',  'Maintenance'],
+    'Completed'      => ['slate', 'Completed'],
   ];
-  [$cls, $label] = $map[$status] ?? ['bg-slate-100 text-slate-600', $status];
-  return '<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-bold '.$cls.'"><span class="text-[8px]">●</span>'.e($label).'</span>';
+  [$tone, $label] = $map[$status] ?? ['slate', $status];
+  return '<span class="pill pill--'.$tone.'"><span class="pill__dot">●</span>'.e($label).'</span>';
 }
 
 $registeredUsers = [

@@ -21,106 +21,105 @@ $stats = [
   ['statPending', 'Pending Follow-up', $pending, 'No reply after 24 hours',     'lucide:clock'],
 ];
 ?>
-<h1 class="text-3xl font-extrabold text-navy tracking-tight">Inquiry Management</h1>
-<p class="text-xs text-slate-500 mt-1">Messages sent from the website inquiry form.</p>
+<h1 class="page-title">Inquiry Management</h1>
+<p class="page-sub">Messages sent from the website inquiry form.</p>
 
-<div class="mt-6 grid sm:grid-cols-3 gap-4">
+<div class="stat-grid">
   <?php foreach ($stats as [$id,$label,$val,$sub,$icon]): ?>
-  <div class="bg-white border border-slate-200 rounded-2xl p-6">
-    <div class="flex items-center justify-between text-xs text-slate-500"><span><?= $label ?></span><iconify-icon icon="<?= $icon ?>" width="16" class="text-navy"></iconify-icon></div>
-    <div id="<?= $id ?>" class="mt-3 text-4xl font-extrabold text-navy tracking-tight"><?= $val ?></div>
-    <div class="mt-4 text-xs text-slate-500"><?= $sub ?></div>
+  <div class="stat-card">
+    <div class="stat-card__head"><span><?= $label ?></span><iconify-icon icon="<?= $icon ?>" width="16" class="stat-card__icon"></iconify-icon></div>
+    <div id="<?= $id ?>" class="stat-card__value"><?= $val ?></div>
+    <div class="stat-card__sub"><?= $sub ?></div>
   </div>
   <?php endforeach; ?>
 </div>
 
-<section class="mt-6 bg-white border border-slate-200 rounded-2xl overflow-hidden">
+<section class="card card--spaced">
   <!-- Toolbar -->
-  <div class="flex flex-wrap items-center gap-3 px-6 py-5">
-    <div class="relative flex-1 min-w-[220px]">
-      <iconify-icon icon="lucide:search" width="16" class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500"></iconify-icon>
-      <input id="inqSearch" oninput="applyFilters()" type="text" placeholder="Search name, email, or item..." class="w-full pl-10 pr-4 py-2.5 bg-[#f4f6fa] border border-slate-200 rounded-lg text-sm outline-none focus:border-amber">
+  <div class="toolbar">
+    <div class="search search--grow">
+      <iconify-icon icon="lucide:search" width="16" class="search__icon"></iconify-icon>
+      <input id="inqSearch" oninput="applyFilters()" type="text" placeholder="Search name, email, or item..." class="search__input">
     </div>
-    <select id="inqStatus" onchange="applyFilters()" class="px-4 py-2.5 bg-white border border-slate-200 rounded-lg text-sm text-navy font-semibold outline-none focus:border-amber">
+    <select id="inqStatus" onchange="applyFilters()" class="select">
       <option value="All">Status: All</option><option>New</option><option>Replied</option><option>Archived</option>
     </select>
-    <button onclick="exportCsv()" class="flex items-center gap-2 px-5 py-2.5 rounded-lg border-2 border-navy text-navy text-sm font-bold hover:bg-slate-50">
+    <button onclick="exportCsv()" class="btn btn--outline">
       <iconify-icon icon="lucide:download" width="16"></iconify-icon> Export CSV
     </button>
   </div>
 
   <!-- Table -->
-  <div class="overflow-x-auto">
-    <table class="w-full text-left text-sm min-w-[860px]">
-      <thead class="bg-[#f4f6fa] text-[11px] uppercase tracking-wide text-slate-500 font-semibold">
-        <tr><th class="px-6 py-3">Status</th><th class="px-6 py-3">Date Submitted</th><th class="px-6 py-3">Customer</th><th class="px-6 py-3">Inquired About</th><th class="px-6 py-3">Category</th><th class="px-6 py-3">Action</th></tr>
+  <div class="table-wrap">
+    <table class="table table--min-860 table--hover">
+      <thead>
+        <tr><th>Status</th><th>Date Submitted</th><th>Customer</th><th>Inquired About</th><th>Category</th><th>Action</th></tr>
       </thead>
       <tbody id="inqRows">
         <?php foreach ($inquiries as $i): ?>
-        <tr class="border-t border-slate-200 hover:bg-slate-50/60"
-            data-status="<?= e($i['status']) ?>" data-followup="<?= $i['followup'] ?>"
+        <tr data-status="<?= e($i['status']) ?>" data-followup="<?= $i['followup'] ?>"
             data-search="<?= e(strtolower($i['name'].' '.$i['email'].' '.$i['item'].' '.$i['type'])) ?>"
             data-inquiry="<?= e(json_encode($i)) ?>">
-          <td class="px-6 py-4 status-cell"><?= pill($i['status']) ?></td>
-          <td class="px-6 py-4 text-slate-500 text-xs whitespace-nowrap"><?= e($i['date']) ?></td>
-          <td class="px-6 py-4"><div class="flex items-center gap-3">
-            <span class="w-8 h-8 rounded-full bg-slate-100 text-[10px] font-bold text-navy flex items-center justify-center"><?= initials($i['name']) ?></span>
-            <div><div class="font-bold text-navy"><?= e($i['name']) ?></div><div class="text-[11px] text-slate-500"><?= e($i['email']) ?></div></div></div></td>
-          <td class="px-6 py-4 text-navy"><?= e($i['item']) ?></td>
-          <td class="px-6 py-4 text-slate-500 text-xs"><?= e($i['type']) ?></td>
-          <td class="px-6 py-4"><button onclick="openDrawer(this.closest('tr'))" class="px-3.5 py-1.5 rounded-md border border-slate-300 text-navy text-xs font-bold hover:bg-slate-50 whitespace-nowrap">View Details</button></td>
+          <td class="status-cell"><?= pill($i['status']) ?></td>
+          <td class="td-muted td-nowrap"><?= e($i['date']) ?></td>
+          <td><div class="person">
+            <span class="avatar"><?= initials($i['name']) ?></span>
+            <div><div class="cell-title"><?= e($i['name']) ?></div><div class="cell-meta"><?= e($i['email']) ?></div></div></div></td>
+          <td><?= e($i['item']) ?></td>
+          <td class="td-muted"><?= e($i['type']) ?></td>
+          <td><button onclick="openDrawer(this.closest('tr'))" class="btn btn--line btn--sm">View Details</button></td>
         </tr>
         <?php endforeach; ?>
       </tbody>
     </table>
-    <div id="inqEmpty" class="hidden px-6 py-12 text-center text-sm text-slate-500">No inquiries match your search.</div>
+    <div id="inqEmpty" class="empty hidden">No inquiries match your search.</div>
   </div>
-  <div class="px-6 py-4 border-t border-slate-200 text-xs text-slate-500">Showing <span id="inqShown"><?= $total ?></span> of <?= $total ?> inquiries</div>
+  <div class="card__foot">Showing <span id="inqShown"><?= $total ?></span> of <?= $total ?> inquiries</div>
 </section>
 
 <!-- Detail drawer -->
 <div id="inquiryDrawer" class="overlay overlay-right" role="dialog" aria-modal="true" aria-labelledby="drawerTitle"
      onclick="if (event.target === this) closeDrawer()">
-  <aside class="sheet bg-white w-full max-w-md h-full flex flex-col shadow-2xl">
-    <div class="flex items-center justify-between px-6 py-5 border-b border-slate-200">
+  <aside class="sheet drawer">
+    <div class="drawer__head">
       <div>
-        <h2 id="drawerTitle" class="text-lg font-extrabold text-navy">Inquiry Details</h2>
-        <div class="mt-1.5 flex items-center gap-3"><span id="dStatus"></span><span id="dDate" class="text-xs text-slate-500"></span></div>
+        <h2 id="drawerTitle" class="drawer__title">Inquiry Details</h2>
+        <div class="drawer__meta"><span id="dStatus"></span><span id="dDate" class="drawer__date"></span></div>
       </div>
-      <button onclick="closeDrawer()" aria-label="Close" class="p-1 text-slate-500 hover:text-navy"><iconify-icon icon="lucide:x" width="22"></iconify-icon></button>
+      <button onclick="closeDrawer()" aria-label="Close" class="close-btn"><iconify-icon icon="lucide:x" width="22"></iconify-icon></button>
     </div>
 
-    <div class="flex-1 overflow-y-auto px-6 py-6 space-y-6">
+    <div class="drawer__body">
       <div>
-        <div class="eyebrow text-slate-500 mb-3">Customer</div>
-        <div class="flex items-center gap-3">
-          <span id="dInitials" class="w-11 h-11 rounded-full bg-navy text-white text-sm font-bold flex items-center justify-center"></span>
-          <div class="font-bold text-navy text-base" id="dName"></div>
+        <div class="eyebrow eyebrow--muted drawer__label">Customer</div>
+        <div class="drawer__customer">
+          <span id="dInitials" class="avatar avatar--navy avatar--lg"></span>
+          <div class="drawer__name" id="dName"></div>
         </div>
-        <dl class="mt-4 space-y-2 text-sm">
-          <div class="flex gap-3"><dt class="w-16 text-slate-500">Email</dt><dd id="dEmail" class="text-navy font-medium break-all"></dd></div>
-          <div class="flex gap-3"><dt class="w-16 text-slate-500">Phone</dt><dd id="dPhone" class="text-navy font-medium"></dd></div>
+        <dl class="detail-list detail-list--spaced">
+          <div class="detail"><dt>Email</dt><dd id="dEmail"></dd></div>
+          <div class="detail"><dt>Phone</dt><dd id="dPhone"></dd></div>
         </dl>
       </div>
 
       <div>
-        <div class="eyebrow text-slate-500 mb-3">Inquiry</div>
-        <dl class="space-y-2 text-sm">
-          <div class="flex gap-3"><dt class="w-16 text-slate-500">About</dt><dd><a id="dItem" href="fleet.php" class="text-navy font-bold underline"></a></dd></div>
-          <div class="flex gap-3"><dt class="w-16 text-slate-500">Type</dt><dd id="dType" class="text-navy font-medium"></dd></div>
+        <div class="eyebrow eyebrow--muted drawer__label">Inquiry</div>
+        <dl class="detail-list">
+          <div class="detail"><dt>About</dt><dd><a id="dItem" href="fleet.php" class="detail__link"></a></dd></div>
+          <div class="detail"><dt>Type</dt><dd id="dType"></dd></div>
         </dl>
       </div>
 
       <div>
-        <div class="eyebrow text-slate-500 mb-3">Message</div>
-        <p id="dMessage" class="text-sm leading-relaxed text-navy bg-[#f4f6fa] border border-slate-200 rounded-xl p-4"></p>
+        <div class="eyebrow eyebrow--muted drawer__label">Message</div>
+        <p id="dMessage" class="drawer__message"></p>
       </div>
     </div>
 
-    <div class="px-6 py-4 border-t border-slate-200 flex flex-wrap gap-3">
-      <a id="dReply" href="#" class="btn-amber flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-bold"><iconify-icon icon="lucide:reply" width="16"></iconify-icon> Reply via Email</a>
-      <button onclick="setStatus('Replied')" class="px-4 py-2.5 rounded-lg border-2 border-navy text-navy text-sm font-bold hover:bg-slate-50">Mark as Replied</button>
-      <button onclick="setStatus('Archived')" class="px-4 py-2.5 rounded-lg text-slate-500 text-sm font-bold hover:text-navy">Archive</button>
+    <div class="drawer__foot">
+      <a id="dReply" href="#" class="btn btn--amber"><iconify-icon icon="lucide:reply" width="16"></iconify-icon> Reply via Email</a>
+      <button onclick="setStatus('Replied')" class="btn btn--outline">Mark as Replied</button>
+      <button onclick="setStatus('Archived')" class="btn btn--ghost">Archive</button>
     </div>
   </aside>
 </div>
@@ -129,12 +128,9 @@ $stats = [
 const rows = [...document.querySelectorAll('#inqRows tr')];
 let current = null;
 
-const BADGE = {
-  New:      'bg-emerald-50 text-emerald-700',
-  Replied:  'bg-blue-50 text-blue-700',
-  Archived: 'bg-slate-100 text-slate-600'
-};
-const badge = s => `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-bold ${BADGE[s]}"><span class="text-[8px]">●</span>${s}</span>`;
+// Status badge (same markup as pill() in includes/mock-data.php)
+const TONE = { New: 'green', Replied: 'blue', Archived: 'slate' };
+const badge = s => `<span class="pill pill--${TONE[s]}"><span class="pill__dot">●</span>${s}</span>`;
 
 function applyFilters() {
   const q = document.getElementById('inqSearch').value.trim().toLowerCase();
