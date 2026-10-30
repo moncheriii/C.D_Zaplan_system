@@ -1,0 +1,98 @@
+/* ===== C.D. Zaplan Trucking — shared styles =====
+   Fonts: Anton (big headings), Plus Jakarta Sans (body/UI), Montserrat (eyebrows + buttons) */
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Montserrat:wght@600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  --navy: #15233e;
+  --amber: #f5a623;
+  --amber-hover: #e09216;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  background: #fff;
+  color: var(--navy);
+  margin: 0;
+  overflow-x: hidden;
+}
+
+/* Anton headings */
+.font-heading {
+  font-family: 'Anton', Impact, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: .01em;
+  font-weight: 400;
+}
+
+/* Small tracked labels + button text (Montserrat) */
+.eyebrow {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+.btn-label {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+/* Photo overlays (navy tint over the site photo) */
+.hero-bg {
+  background:
+    linear-gradient(rgba(21,35,62,.78), rgba(21,35,62,.78)),
+    url('../img/project.jpg') center/cover no-repeat;
+}
+.panel-bg {
+  background:
+    linear-gradient(180deg, rgba(21,35,62,.55) 0%, rgba(21,35,62,.82) 100%),
+    url('../img/project.jpg') center/cover no-repeat;
+}
+
+/* Form inputs (login / register) */
+.field {
+  width: 100%;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 14px 16px;
+  font-size: 14px;
+  color: var(--navy);
+  outline: none;
+}
+.field::placeholder { color: #94a3b8; }
+.field:focus { border-color: var(--amber); box-shadow: 0 0 0 3px rgba(245,166,35,.18); }
+
+.btn-amber { background: var(--amber); color: var(--navy); transition: background .15s; }
+.btn-amber:hover { background: var(--amber-hover); }
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+
+/* Review carousel: hide native scrollbar */
+.no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
+/* ===== Overlays: blurred backdrop + animated panel (inquiry modal, admin drawer) ===== */
+.overlay {
+  position: fixed; inset: 0; z-index: 60;
+  display: flex; align-items: center; justify-content: center; padding: 16px;
+  background: rgba(21, 35, 62, .45);
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+  opacity: 0; visibility: hidden;
+  transition: opacity .25s ease, visibility .25s ease;
+}
+.overlay.is-open { opacity: 1; visibility: visible; }
+.overlay .sheet { transform: translateY(18px) scale(.98); transition: transform .28s cubic-bezier(.2,.8,.2,1); }
+.overlay.is-open .sheet { transform: none; }
+/* side drawer variant */
+.overlay.overlay-right { justify-content: flex-end; align-items: stretch; padding: 0; }
+.overlay.overlay-right .sheet { transform: translateX(100%); }
+.overlay.overlay-right.is-open .sheet { transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .overlay, .overlay .sheet { transition: none; }
+}
